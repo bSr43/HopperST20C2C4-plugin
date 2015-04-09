@@ -23,6 +23,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2015 Cryptic Apps. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string></string>
+	<string>ST20CPU</string>
 </dict>
 </plist>

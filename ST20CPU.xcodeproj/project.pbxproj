@@ -6,7 +6,16 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0714A9361AD6978A00D88DCD /* ST20CPU.m in Sources */ = {isa = PBXBuildFile; fileRef = 0714A9351AD6978A00D88DCD /* ST20CPU.m */; };
+		0714A9391AD69A0400D88DCD /* ST20CPUContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 0714A9381AD69A0400D88DCD /* ST20CPUContext.m */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		0714A9341AD6978A00D88DCD /* ST20CPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ST20CPU.h; sourceTree = "<group>"; };
+		0714A9351AD6978A00D88DCD /* ST20CPU.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ST20CPU.m; sourceTree = "<group>"; };
+		0714A9371AD69A0400D88DCD /* ST20CPUContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ST20CPUContext.h; sourceTree = "<group>"; };
+		0714A9381AD69A0400D88DCD /* ST20CPUContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ST20CPUContext.m; sourceTree = "<group>"; };
 		07ADE77F1AD69667004796A8 /* ST20CPU.hopperCPU */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ST20CPU.hopperCPU; sourceTree = BUILT_PRODUCTS_DIR; };
 		07ADE7831AD69667004796A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -42,6 +51,10 @@
 			isa = PBXGroup;
 			children = (
 				07ADE7821AD69667004796A8 /* Supporting Files */,
+				0714A9341AD6978A00D88DCD /* ST20CPU.h */,
+				0714A9351AD6978A00D88DCD /* ST20CPU.m */,
+				0714A9371AD69A0400D88DCD /* ST20CPUContext.h */,
+				0714A9381AD69A0400D88DCD /* ST20CPUContext.m */,
 			);
 			path = ST20CPU;
 			sourceTree = "<group>";
@@ -120,6 +133,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0714A9361AD6978A00D88DCD /* ST20CPU.m in Sources */,
+				0714A9391AD69A0400D88DCD /* ST20CPUContext.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +222,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/Users/bsr/sources/Xcode/Hopper/SDK/include,
+				);
 				INFOPLIST_FILE = ST20CPU/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -219,6 +239,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/Users/bsr/sources/Xcode/Hopper/SDK/include,
+				);
 				INFOPLIST_FILE = ST20CPU/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -246,6 +271,7 @@
 				07ADE7881AD69667004796A8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
