@@ -66,7 +66,7 @@
 
 /// Returns an array of NSString of CPU subfamilies handled by the plugin for a given CPU family.
 - (NSArray *)cpuSubFamiliesForFamily:(NSString *)family {
-    return @[@"C1"];
+    return @[@"C2/C4"];
 }
 
 /// Returns 32 or 64, according to the family and subFamily arguments.
@@ -121,6 +121,10 @@
 
 - (NSString *)cpuRegisterStateMaskToString:(uint32_t)cpuState {
     return @"";
+}
+
+- (NSString *)framePointerRegisterNameForFile:(NSObject<HPDisassembledFile> *)file {
+    return nil;
 }
 
 - (BOOL)registerIndexIsStackPointer:(uint32_t)reg ofClass:(RegClass)reg_class {

@@ -33,6 +33,7 @@
     disasm->instruction.mnemonic[0] = 0;
     disasm->instruction.addressValue = 0;
     disasm->instruction.branchType = DISASM_BRANCH_NONE;
+    bzero(&disasm->prefix, sizeof(DisasmPrefix));
     for (int i=0; i<DISASM_MAX_OPERANDS; i++) {
         disasm->operand[0].type = DISASM_OPERAND_NO_OPERAND;
         disasm->operand[0].immediateValue = 0;
@@ -71,9 +72,19 @@
     return address + 1;
 }
 
+/// Return 0 if the instruction at this address doesn't represent a NOP instruction (or any padding instruction), or the insturction length if any.
+- (int)isNopAt:(Address)address {
+    return [_file readUInt16AtVirtualAddress:address] == 0xF063;
+}
+
 - (BOOL)hasProcedurePrologAt:(Address)address {
-    // TODO
-    return NO;
+    // If the instruction is "AJW", we have a prolog...
+    uint8_t code;
+    do {
+        code = [_file readUInt8AtVirtualAddress:address++] & 0xF0;
+    } while (code == 0x60 || code== 0x20);
+
+    return (code == 0xB0);
 }
 
 /// Notify the plugin that an analysisbegan from an entry point.
@@ -121,10 +132,10 @@
 - (int)disassembleSingleInstruction:(DisasmStruct *)disasm usingProcessorMode:(NSUInteger)mode {
     [self initDisasmStructure:disasm withSyntaxIndex:0];
 
-    Address iPtr = disasm->virtualAddr;
+    uint32_t iPtr = (uint32_t) disasm->virtualAddr;
     const uint8_t *ptr = disasm->bytes;
 
-    unsigned long oReg = 0;
+    uint32_t oReg = 0;
 
     BOOL inPfix = NO;
     disasm->instruction.mnemonic[0] = 0;
@@ -656,6 +667,77 @@
                         strcpy(disasm->instruction.mnemonic, "csu");
                         break;
 
+                    ////
+
+                    case (uint32_t) 0xfffffff7c:
+                        strcpy(disasm->instruction.mnemonic, "ldprodid");
+                        break;
+                    case (uint32_t) 0xfffffff7d:
+                        strcpy(disasm->instruction.mnemonic, "reboot");
+                        break;
+                    case (uint32_t) 0xfffffffbc:
+                        strcpy(disasm->instruction.mnemonic, "stclock");
+                        break;
+                    case (uint32_t) 0xfffffffbd:
+                        strcpy(disasm->instruction.mnemonic, "ldclock");
+                        break;
+                    case (uint32_t) 0xfffffffbe:
+                        strcpy(disasm->instruction.mnemonic, "clockdis");
+                        break;
+                    case (uint32_t) 0xfffffffbf:
+                        strcpy(disasm->instruction.mnemonic, "clockenb");
+                        break;
+                    case (uint32_t) 0xfffffffc0:
+                        strcpy(disasm->instruction.mnemonic, "nop");
+                        break;
+                    case (uint32_t) 0xfffffffd4:
+                        strcpy(disasm->instruction.mnemonic, "devmove");
+                        break;
+                    case (uint32_t) 0xfffffffde:
+                        strcpy(disasm->instruction.mnemonic, "restart");
+                        break;
+                    case (uint32_t) 0xfffffffdf:
+                        strcpy(disasm->instruction.mnemonic, "causeerror");
+                        break;
+                    case (uint32_t) 0xfffffffef:
+                        disasm->instruction.branchType = DISASM_BRANCH_RET;
+                        strcpy(disasm->instruction.mnemonic, "iret");
+                        break;
+                    case (uint32_t) 0xffffffff0:
+                        strcpy(disasm->instruction.mnemonic, "swapqueue");
+                        break;
+                    case (uint32_t) 0xffffffff1:
+                        strcpy(disasm->instruction.mnemonic, "swaptimer");
+                        break;
+                    case (uint32_t) 0xffffffff2:
+                        strcpy(disasm->instruction.mnemonic, "insertqueue");
+                        break;
+                    case (uint32_t) 0xffffffff3:
+                        strcpy(disasm->instruction.mnemonic, "timeslice");
+                        break;
+                    case (uint32_t) 0xffffffff4:
+                        strcpy(disasm->instruction.mnemonic, "signal");
+                        break;
+                    case (uint32_t) 0xffffffff5:
+                        strcpy(disasm->instruction.mnemonic, "wait");
+                        break;
+                    case (uint32_t) 0xffffffff6:
+                        strcpy(disasm->instruction.mnemonic, "trapdis");
+                        break;
+                    case (uint32_t) 0xffffffff7:
+                        strcpy(disasm->instruction.mnemonic, "trapenb");
+                        break;
+                    case (uint32_t) 0xffffffffb:
+                        disasm->instruction.branchType = DISASM_BRANCH_RET;
+                        strcpy(disasm->instruction.mnemonic, "tret");
+                        break;
+                    case (uint32_t) 0xffffffffc:
+                        strcpy(disasm->instruction.mnemonic, "ldshadow");
+                        break;
+                    case (uint32_t) 0xffffffffd:
+                        strcpy(disasm->instruction.mnemonic, "stshadow");
+                        break;
+
                     default:
                         return DISASM_UNKNOWN_OPCODE;
                 }
@@ -839,11 +921,6 @@
 /// Note: ASTNode is not publicly exposed yet. You cannot write a decompiler at the moment.
 - (ASTNode *)decompileInstructionAtAddress:(Address)a
                                     disasm:(DisasmStruct)d
-                                    length:(int)instrLength
-                                      arg1:(ASTNode *)arg1
-                                      arg2:(ASTNode *)arg2
-                                      arg3:(ASTNode *)arg3
-                                      dest:(ASTNode *)dest
                                  addNode_p:(BOOL *)addNode_p
                            usingDecompiler:(Decompiler *)decompiler {
     return nil;
