@@ -33,10 +33,12 @@
     disasm->instruction.mnemonic[0] = 0;
     disasm->instruction.addressValue = 0;
     disasm->instruction.branchType = DISASM_BRANCH_NONE;
+    disasm->instruction.condition = DISASM_INST_COND_AL;
+    bzero(&disasm->instruction.eflags, sizeof(DisasmEFLAGS));
     bzero(&disasm->prefix, sizeof(DisasmPrefix));
     for (int i=0; i<DISASM_MAX_OPERANDS; i++) {
-        disasm->operand[0].type = DISASM_OPERAND_NO_OPERAND;
-        disasm->operand[0].immediateValue = 0;
+        disasm->operand[i].type = DISASM_OPERAND_NO_OPERAND;
+        disasm->operand[i].immediateValue = 0;
     }
 }
 
@@ -78,12 +80,21 @@
 }
 
 - (BOOL)hasProcedurePrologAt:(Address)address {
-    // If the instruction is "AJW", we have a prolog...
+    // If the instructions are "[LDL], AJW", we have a prolog...
     uint8_t code;
+
     do {
         code = [_file readUInt8AtVirtualAddress:address++] & 0xF0;
     } while (code == 0x60 || code== 0x20);
 
+    // LDL?
+    if (code == 0x70) {
+        do {
+            code = [_file readUInt8AtVirtualAddress:address++] & 0xF0;
+        } while (code == 0x60 || code== 0x20);
+    }
+
+    // AJW?
     return (code == 0xB0);
 }
 
