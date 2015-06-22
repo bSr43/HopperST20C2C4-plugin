@@ -1,0 +1,10 @@
+include $(GNUSTEP_MAKEFILES)/common.make
+
+BUNDLE_NAME = ST20CPU
+ST20CPU_OBJC_FILES = \
+	ST20CPU/ST20CPU.m \
+	ST20CPU/ST20CPUContext.m
+
+ST20CPU_OBJCFLAGS=-I../../../SDK/include -DLINUX -Wno-format
+
+include $(GNUSTEP_MAKEFILES)/bundle.make

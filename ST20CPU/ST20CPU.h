@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Cryptic Apps. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <Hopper/CPUDefinition.h>
 
 @interface ST20CPU : NSObject<CPUDefinition>
