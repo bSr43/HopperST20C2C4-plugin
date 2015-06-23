@@ -5,6 +5,6 @@ ST20CPU_OBJC_FILES = \
 	ST20CPU/ST20CPU.m \
 	ST20CPU/ST20CPUContext.m
 
-ST20CPU_OBJCFLAGS=-I../../../SDK/include -DLINUX -Wno-format
+ST20CPU_OBJCFLAGS=-I../HopperSDK/include -DLINUX -Wno-format
 
 include $(GNUSTEP_MAKEFILES)/bundle.make
